@@ -24,15 +24,15 @@ public class Player {
     private String username;
 
     @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "game_id")
-    private Game game;
+    @JoinColumn(name = "room_id")
+    private Room room;
 
     public Player() {
     }
 
-    public Player(String username, Game game) {
+    public Player(String username, Room room) {
         this.username = username;
-        this.game = game;
+        this.room = room;
     }
 
     public Long getId() {
@@ -51,17 +51,17 @@ public class Player {
         this.username = username;
     }
 
-    public Game getGame() {
-        return game;
+    public Room getRoom() {
+        return room;
     }
 
-    public void setGame(Game game) {
-        this.game = game;
+    public void setRoom(Room room) {
+        this.room = room;
     }
 
     @Override
     public String toString() {
-        return "Player{" + "id=" + id + ", username=" + username + ", gameId=" + game + '}';
+        return "Player{" + "id=" + id + ", username=" + username + ", roomId=" + room + '}';
     }
 
 }

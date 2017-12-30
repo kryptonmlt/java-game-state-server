@@ -1,4 +1,4 @@
-package com.example;
+package org.kryptonmlt.multiplayer;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

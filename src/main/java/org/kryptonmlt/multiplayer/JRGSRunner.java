@@ -3,14 +3,14 @@ package org.kryptonmlt.multiplayer;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import org.kryptonmlt.multiplayer.models.db.Game;
+import org.kryptonmlt.multiplayer.models.db.Room;
 import org.kryptonmlt.multiplayer.repositories.GameObjectRepository;
-import org.kryptonmlt.multiplayer.repositories.GameRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.kryptonmlt.multiplayer.repositories.RoomRepository;
 
 /**
  *
@@ -22,7 +22,7 @@ public class JRGSRunner implements CommandLineRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(JRGSRunner.class);
 
     @Autowired
-    private GameRepository gameRepository;
+    private RoomRepository roomRepository;
 
     @Autowired
     private GameObjectRepository gameObjectRepository;
@@ -41,10 +41,10 @@ public class JRGSRunner implements CommandLineRunner {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.HOUR_OF_DAY, -JRGSRunner.HOURS_AGO);
         Date when = calendar.getTime();
-        List<Game> games = gameRepository.findAll();
-        for (Game game : games) {
-            if (game.getDateStarted() == null || game.getDateStarted().after(when)) {
-                gameObjectRepository.addRoom(game.getId());
+        List<Room> rooms = roomRepository.findAll();
+        for (Room room : rooms) {
+            if (room.getDateStarted() == null || room.getDateStarted().after(when)) {
+                gameObjectRepository.addRoom(room.getId());
             }
         }
 

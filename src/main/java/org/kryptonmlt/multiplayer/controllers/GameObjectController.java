@@ -27,30 +27,30 @@ public class GameObjectController {
     @Autowired
     private GameObjectRepository gameObjectRepository;
 
-    @RequestMapping(value = "/{gameId}", method = RequestMethod.GET, headers = "Accept=application/json")
-    public List<GameObject> getGameObject(@PathVariable("gameId") long gameId, @RequestParam("goId") int goId) {
+    @RequestMapping(value = "/{roomId}", method = RequestMethod.GET, headers = "Accept=application/json")
+    public List<GameObject> getGameObject(@PathVariable("roomId") long roomId, @RequestParam("goId") int goId) {
         if (goId == -1) {
-            return gameObjectRepository.findAny(gameId);
+            return gameObjectRepository.findAny(roomId);
         }
         List<GameObject> result = new ArrayList<>();
-        result.add(gameObjectRepository.findOne(gameId, goId));
+        result.add(gameObjectRepository.findOne(roomId, goId));
         return result;
     }
 
-    @RequestMapping(value = "/{gameId}", method = RequestMethod.POST, consumes = {"application/json"})
-    public Integer addGameObject(@PathVariable("gameId") long gameId, @RequestBody String jsonStr) throws JSONException {
+    @RequestMapping(value = "/{roomId}", method = RequestMethod.POST, consumes = {"application/json"})
+    public Integer addGameObject(@PathVariable("roomId") long roomId, @RequestBody String jsonStr) throws JSONException {
         JSONObject jObject = new JSONObject(jsonStr);
         GameObject go = new GameObject(jObject.getString("type"), jObject.getInt("playerId"), 1,
                 Tools.convertStringArrayToIntArray(jObject.getString("tile").replace("[", "").replace("]", "").split(",")),
                 Tools.convertStringArrayToFloatArray(jObject.getString("position").replace("[", "").replace("]", "").split(",")));
-        return gameObjectRepository.save(gameId, go);
+        return gameObjectRepository.save(roomId, go);
     }
 
-    @RequestMapping(value = "/{gameId}", method = RequestMethod.PUT, headers = "Accept=application/json")
-    public void updateGameObject(@PathVariable("gameId") long gameId, @RequestParam("goId") int goId,
+    @RequestMapping(value = "/{roomId}", method = RequestMethod.PUT, headers = "Accept=application/json")
+    public void updateGameObject(@PathVariable("roomId") long roomId, @RequestParam("goId") int goId,
             @RequestBody String jsonStr) throws JSONException {
         JSONObject jObject = new JSONObject(jsonStr);
-        GameObject go = gameObjectRepository.findOne(gameId, goId);
+        GameObject go = gameObjectRepository.findOne(roomId, goId);
         go.setLastAction(ActionEnum.UPDATE);
         if (jObject.has("position")) {
             go.setPosition(Tools.convertStringArrayToFloatArray(jObject.getString("position").replace("[", "").replace("]", "").split(",")));
@@ -63,9 +63,9 @@ public class GameObjectController {
         }
     }
 
-    @RequestMapping(value = "/{gameId}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-    public void deleteGameObject(@PathVariable("gameId") long gameId, @RequestParam("goId") int goId) {
-        GameObject go = gameObjectRepository.findOne(gameId, goId);
+    @RequestMapping(value = "/{roomId}", method = RequestMethod.DELETE, headers = "Accept=application/json")
+    public void deleteGameObject(@PathVariable("roomId") long roomId, @RequestParam("goId") int goId) {
+        GameObject go = gameObjectRepository.findOne(roomId, goId);
         go.setLastAction(ActionEnum.DELETE);
     }
 }
